@@ -1,2 +1,2 @@
 # Serp
-Snake game :)
+Snake game :smile:
