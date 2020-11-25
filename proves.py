@@ -27,26 +27,56 @@ screen.blit(fondo, (0, 0))
 Grid_w = 52
 Grid_h = 52
 
-#Definicio serp
-serp = Clases.Serp()
+#Definicio Serp
+Serp = Clases.Serp()
+
+#Definicio poma
+Menjar = Clases.Menjar()
 
 #MAIN LOOP
 speed_param = 0
 clock = pygame.time.Clock()
 running = True
+direccio_x = 1
+direccio_y = 0
+score = 0
 while running:
     clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and direccio_y != 1:
+                direccio_x = 0 
+                direccio_y = -1
+            elif event.key == pygame.K_DOWN and direccio_y != -1:
+                direccio_x = 0
+                direccio_y = 1
+            elif event.key == pygame.K_LEFT and direccio_x != 1:
+                direccio_x = -1
+                direccio_y = 0
+            elif event.key == pygame.K_RIGHT and direccio_x != -1:
+                direccio_x = 1
+                direccio_y = 0
+            
+    if speed_param == 15:   
+        Serp.move(direccio_x, direccio_y)
+        speed_param = 0
     
-    if speed_param == 15:
-        serp.move(1, 0)
-        speed_param =0
+    print(Menjar.pos_x, Menjar.pos_y, Serp.pos_x, Serp.pos_y)
+    if Menjar.pos_x == Serp.pos_x and Menjar.pos_y == Serp.pos_y:
+        Menjar = Clases.Menjar()
+        score += 1
     
     #Coses del final
+    scoreText = pygame.font.SysFont('freesansbold.ttf', 50)
+    scoreF = scoreText.render(str(score), True, (255, 255, 255))
+    screen.blit(fondo, (0, 0))
+    screen.blit(scoreF, (85, 50))
     screen.blit(pla, (24, 144))
     pla.blit(pygame.image.load(os.path.join(base_dir, "imatges", "tablero.png")),(0, 0))
-    serp_draw = pygame.draw.rect(pla, (100, 100, 255), pygame.Rect(serp.pos_x+5, serp.pos_y+5, 40, 40))
+    Serp.draw(pla)
+    Menjar.draw(pla)
     speed_param += 1
     pygame.display.update()
