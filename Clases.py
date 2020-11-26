@@ -2,8 +2,6 @@ import pygame
 import random
 
 Grid = 52
-        
-
 class Serp:
     def __init__(self):
         self.len = 3
@@ -30,7 +28,7 @@ class Serp:
 class Menjar:
     def __init__(self, posicio):
         if posicio == "-":
-            pos = (random.randint(1,14) * Grid, random.randint(1,14) * Grid)
+            pos = (random.randint(0,14) * Grid, random.randint(0,14) * Grid)
             self.pos = pos
         else:
             self.pos = posicio

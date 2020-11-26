@@ -23,7 +23,7 @@ pygame.display.set_icon(icono)
 fondo = pygame.image.load(os.path.join(base_dir, "imatges", "Fondo_v2.png"))
 screen.blit(fondo, (0, 0))
 
-#Dibuixa la graella ()
+#Dibuixa la graella
 Grid = 52
 
 #Definicio Serp
@@ -63,24 +63,23 @@ while running:
         #Mort
         aux = [e for e in Serp.pos]
         aux[0] = 0
-        if cap[0] in [15*Grid, 0] or cap[1] in [15*Grid, 0] or cap in aux:
+        if cap[0] > 14*Grid or cap[0] < 0*Grid or cap[1] > 14*Grid or cap[1] < 0*Grid or cap in aux:
             Serp = Clases.Serp()
             Menjar = Clases.Menjar("-")
             score = 0
 
         #Colisio amb el menjar
         elif Menjar.pos in Serp.pos:
-            pos_menjar_new = (random.randint(1,14)*Grid, random.randint(1,14)*Grid) #Verifica que la posició no estigui dins la serp
+            pos_menjar_new = (random.randint(1,14)*Grid, random.randint(0,14)*Grid) #Verifica que la posició no estigui dins la serp
             while pos_menjar_new in Serp.pos:
-                pos_menjar_new = (random.randint(1,14)*Grid, random.randint(1,14)*Grid)
+                pos_menjar_new = (random.randint(0,14)*Grid, random.randint(0,14)*Grid)
 
             Menjar = Clases.Menjar(pos_menjar_new)
             score += 1
             Serp.len += 1
             Serp.pos.append(0)
     
-    
-    #Coses del final
+    #Actualització pantalla
     scoreText = pygame.font.SysFont('freesansbold.ttf', 50)
     scoreF = scoreText.render(str(score), True, (255, 255, 255))
     screen.blit(fondo, (0, 0))
