@@ -1,7 +1,6 @@
 import pygame
 import os
 import Clases
-import sys
 
 #Defineix el directori base
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -37,8 +36,6 @@ Menjar = Clases.Menjar()
 speed_param = 0
 clock = pygame.time.Clock()
 running = True
-direccio_x = 1
-direccio_y = 0
 score = 0
 while running:
     clock.tick(60)
@@ -60,14 +57,23 @@ while running:
                 direccio_x = 1
                 direccio_y = 0
             
-    if speed_param == 15:   
+    if speed_param == 8:   
         Serp.move(direccio_x, direccio_y)
         speed_param = 0
-    
-    print(Menjar.pos_x, Menjar.pos_y, Serp.pos_x, Serp.pos_y)
-    if Menjar.pos_x == Serp.pos_x and Menjar.pos_y == Serp.pos_y:
+        if Serp.pos_x_list[0] in [15*52, 0] or Serp.pos_y_list[0] in [15*52, 0] or Serp.colisio == True:
+            Serp = Clases.Serp()
+            Menjar = Clases.Menjar()
+            score = 0
+            direccio_x = 1
+            direccio_y = 0
+
+    elif Menjar.pos_x == Serp.pos_x_list[0] and Menjar.pos_y == Serp.pos_y_list[0]:
         Menjar = Clases.Menjar()
         score += 1
+        Serp.len += 1
+        Serp.pos_x_list.append(0)
+        Serp.pos_y_list.append(0)
+    
     
     #Coses del final
     scoreText = pygame.font.SysFont('freesansbold.ttf', 50)
