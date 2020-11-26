@@ -1,6 +1,7 @@
 import pygame
 import os
 import Clases
+import random
 
 #Defineix el directori base
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -23,14 +24,13 @@ fondo = pygame.image.load(os.path.join(base_dir, "imatges", "Fondo_v2.png"))
 screen.blit(fondo, (0, 0))
 
 #Dibuixa la graella ()
-Grid_w = 52
-Grid_h = 52
+Grid = 52
 
 #Definicio Serp
 Serp = Clases.Serp()
 
-#Definicio poma
-Menjar = Clases.Menjar()
+#Definicio menjar
+Menjar = Clases.Menjar("-")
 
 #MAIN LOOP
 speed_param = 0
@@ -38,41 +38,46 @@ clock = pygame.time.Clock()
 running = True
 score = 0
 while running:
+    #Eventos
     clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and direccio_y != 1:
-                direccio_x = 0 
-                direccio_y = -1
-            elif event.key == pygame.K_DOWN and direccio_y != -1:
-                direccio_x = 0
-                direccio_y = 1
-            elif event.key == pygame.K_LEFT and direccio_x != 1:
-                direccio_x = -1
-                direccio_y = 0
-            elif event.key == pygame.K_RIGHT and direccio_x != -1:
-                direccio_x = 1
-                direccio_y = 0
-            
-    if speed_param == 8:   
-        Serp.move(direccio_x, direccio_y)
+            if event.key == pygame.K_UP and Serp.direccio[1] != 1:
+                Serp.direccio = (0, -1)
+            elif event.key == pygame.K_DOWN and Serp.direccio[1] != -1:
+                Serp.direccio = (0, 1)
+            elif event.key == pygame.K_LEFT and Serp.direccio[0] != 1:
+                Serp.direccio = (-1, 0)
+            elif event.key == pygame.K_RIGHT and Serp.direccio[0] != -1:
+                Serp.direccio = (1, 0)
+    
+    #Moviment        
+    if speed_param == 5:   
+        Serp.move()
         speed_param = 0
-        if Serp.pos_x_list[0] in [15*52, 0] or Serp.pos_y_list[0] in [15*52, 0] or Serp.colisio == True:
-            Serp = Clases.Serp()
-            Menjar = Clases.Menjar()
-            score = 0
-            direccio_x = 1
-            direccio_y = 0
+        cap = Serp.pos[0]
 
-    elif Menjar.pos_x == Serp.pos_x_list[0] and Menjar.pos_y == Serp.pos_y_list[0]:
-        Menjar = Clases.Menjar()
-        score += 1
-        Serp.len += 1
-        Serp.pos_x_list.append(0)
-        Serp.pos_y_list.append(0)
+        #Mort
+        aux = [e for e in Serp.pos]
+        aux[0] = 0
+        if cap[0] in [15*Grid, 0] or cap[1] in [15*Grid, 0] or cap in aux:
+            Serp = Clases.Serp()
+            Menjar = Clases.Menjar("-")
+            score = 0
+
+        #Colisio amb el menjar
+        elif Menjar.pos in Serp.pos:
+            pos_menjar_new = (random.randint(1,14)*Grid, random.randint(1,14)*Grid) #Verifica que la posició no estigui dins la serp
+            while pos_menjar_new in Serp.pos:
+                pos_menjar_new = (random.randint(1,14)*Grid, random.randint(1,14)*Grid)
+
+            Menjar = Clases.Menjar(pos_menjar_new)
+            score += 1
+            Serp.len += 1
+            Serp.pos.append(0)
     
     
     #Coses del final

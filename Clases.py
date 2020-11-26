@@ -1,14 +1,13 @@
 import pygame
 import random
 
-Grid_w = 52
-Grid_h = 52
+Grid = 52
         
 
 class Serp:
     def __init__(self):
         self.len = 3
-        self.pos = [(7*52, 7*52), (6*52, 7*52), (5*52, 7*52)]
+        self.pos = [(7*Grid, 7*Grid), (6*Grid, 7*Grid), (5*Grid, 7*Grid)]
         self.direccio = (1, 0)
     
 
@@ -19,7 +18,7 @@ class Serp:
         for i in range(1, self.len):
             self.pos[i] = aux[i-1]
 
-        cap = (cap[0] + self.direccio[0] * 52, cap[1] + self.direccio[1] * 52)
+        cap = (cap[0] + self.direccio[0] * Grid, cap[1] + self.direccio[1] * Grid)
         self.pos[0] = cap
     
 
@@ -31,7 +30,7 @@ class Serp:
 class Menjar:
     def __init__(self, posicio):
         if posicio == "-":
-            pos = (random.randint(1,14) * Grid_w, random.randint(1,14) * Grid_h)
+            pos = (random.randint(1,14) * Grid, random.randint(1,14) * Grid)
             self.pos = pos
         else:
             self.pos = posicio
